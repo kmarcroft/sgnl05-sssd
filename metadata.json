@@ -39,7 +39,7 @@
     },
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": ["7", "8", "9"]
+      "operatingsystemrelease": ["7", "8", "9", "10"]
     },
     {
       "operatingsystem": "Suse",
@@ -50,6 +50,6 @@
     {"name":"puppet","version_requirement":">= 5.5.10 < 7.0.0" }
   ],
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 5.2.0 < 6.0.0"}
+    {"name":"puppetlabs/stdlib","version_requirement":">= 5.2.0 < 7.0.0"}
   ]
 }
