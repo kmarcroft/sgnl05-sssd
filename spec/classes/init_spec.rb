@@ -143,7 +143,7 @@ describe 'sssd' do
 
         it do
           is_expected.to contain_package('sssd').with(
-            ensure: 'present',
+            ensure: 'installed',
           )
         end
 
@@ -155,7 +155,7 @@ describe 'sssd' do
           v[:extra_packages].each do |pkg|
             it do
               is_expected.to contain_package(pkg).with(
-                ensure: 'present',
+                ensure: 'installed',
               )
             end
 
