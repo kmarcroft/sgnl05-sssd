@@ -1,3 +1,6 @@
+### 2026-03-28 (4.0.2)
+  * Fix rake reference task (add alias for strings:generate:reference)
+
 ### 2026-03-28 (4.0.1)
   * Add puppet-strings gem for REFERENCE.md generation
   * Fix spec tests to match ensure_packages behavior (installed vs present)
