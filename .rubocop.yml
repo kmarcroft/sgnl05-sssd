@@ -45,6 +45,3 @@ Style/TrailingCommaInArrayLiteral:
 
 Style/TrailingCommaInHashLiteral:
   Enabled: false
-
-RSpec:
-  Enabled: false
