@@ -16,6 +16,15 @@ AllCops:
 Layout/LineLength:
   Enabled: false
 
+Layout/HashAlignment:
+  Enabled: false
+
+Layout/EmptyLines:
+  Enabled: false
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
 Metrics:
   Enabled: false
 
@@ -44,4 +53,22 @@ Style/TrailingCommaInArrayLiteral:
   Enabled: false
 
 Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/CombinableLoops:
+  Enabled: false
+
+Style/MixinUsage:
   Enabled: false
