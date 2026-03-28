@@ -92,17 +92,26 @@ class sssd (
 
   # Warn on unsupported platforms
   if ($::facts['os']['family'] == 'RedHat') {
-    if ($::facts['os']['name'] == 'Amazon') and !($::facts['os']['release']['major'] in ['2']) {
-      warning("osname Amazon's os.release.major is <${::facts['os']['release']['major']}> and must be 2.")
-    }
-    if !($::facts['os']['name'] == 'RedHat') and !($::facts['os']['release']['major'] in ['6', '7', '8']) {
-      warning("osname RedHat's os.release.major is <${::facts['os']['release']['major']}> and must be 6, 7 or 8.")
+    if ($::facts['os']['name'] == 'Amazon') {
+      if !($::facts['os']['release']['major'] in ['2']) {
+        warning("osname Amazon's os.release.major is <${::facts['os']['release']['major']}> and must be 2.")
+      }
+    } elsif ($::facts['os']['name'] in ['RedHat', 'CentOS']) {
+      if !($::facts['os']['release']['major'] in ['6', '7', '8']) {
+        warning("osname RedHat's os.release.major is <${::facts['os']['release']['major']}> and must be 6, 7 or 8.")
+      }
+    } elsif ($::facts['os']['name'] == 'Fedora') {
+      if !($::facts['os']['release']['major'] in ['30', '31', '32', '33']) {
+        warning("osname Fedora's os.release.major is <${::facts['os']['release']['major']}> and must be 29, 30, 31, 32 or 33.")
+      }
+    } else {
+      warning("osname, \"${::facts['os']['name']}\", is recongnized as part of the RedHat family but is unsupported")
     }
   }
 
   if $::facts['os']['family'] == 'Suse' {
-    if !($::facts['os']['release']['major'] in ['11', '12']) {
-      warning("osfamily Suse's os.release.major is <${::facts['os']['release']['major']}> and must be 11 or 12.")
+    if !($::facts['os']['release']['major'] in ['11', '12', '15']) {
+      warning("osfamily Suse's os.release.major is <${::facts['os']['release']['major']}> and must be 11, 12 or 15.")
     }
     if ($::facts['os']['release']['major'] == '11') and !($::facts['os']['release']['minor'] in ['3', '4']) {
       warning("Suse 11's os.release.minor is <${::facts['os']['release']['minor']}> and must be 3 or 4.")

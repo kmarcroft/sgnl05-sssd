@@ -118,25 +118,6 @@ describe 'sssd' do
         },
       },
     },
-    'Fedora 29' => {
-      :extra_packages => [
-        'authselect',
-        'oddjob-mkhomedir',
-      ],
-      :manage_oddjobd => true,
-      :facts_hash => {
-        :osfamily => 'RedHat',
-        :operatingsystem => 'Fedora',
-        :operatingsystemmajrelease => '29',
-        :os => {
-          'family' => 'RedHat',
-          'name'   => 'Fedora',
-          'release' => {
-            'major' => '29',
-          },
-        },
-      },
-    },
     'Fedora 30' => {
       :extra_packages => [
         'authselect',
@@ -152,6 +133,63 @@ describe 'sssd' do
           'name'   => 'Fedora',
           'release' => {
             'major' => '30',
+          },
+        },
+      },
+    },
+    'Fedora 31' => {
+      :extra_packages => [
+        'authselect',
+        'oddjob-mkhomedir',
+      ],
+      :manage_oddjobd => true,
+      :facts_hash => {
+        :osfamily => 'RedHat',
+        :operatingsystem => 'Fedora',
+        :operatingsystemmajrelease => '31',
+        :os => {
+          'family' => 'RedHat',
+          'name'   => 'Fedora',
+          'release' => {
+            'major' => '31',
+          },
+        },
+      },
+    },
+    'Fedora 32' => {
+      :extra_packages => [
+        'authselect',
+        'oddjob-mkhomedir',
+      ],
+      :manage_oddjobd => true,
+      :facts_hash => {
+        :osfamily => 'RedHat',
+        :operatingsystem => 'Fedora',
+        :operatingsystemmajrelease => '32',
+        :os => {
+          'family' => 'RedHat',
+          'name'   => 'Fedora',
+          'release' => {
+            'major' => '32',
+          },
+        },
+      },
+    },
+    'Fedora 33' => {
+      :extra_packages => [
+        'authselect',
+        'oddjob-mkhomedir',
+      ],
+      :manage_oddjobd => true,
+      :facts_hash => {
+        :osfamily => 'RedHat',
+        :operatingsystem => 'Fedora',
+        :operatingsystemmajrelease => '33',
+        :os => {
+          'family' => 'RedHat',
+          'name'   => 'Fedora',
+          'release' => {
+            'major' => '33',
           },
         },
       },
@@ -291,6 +329,29 @@ describe 'sssd' do
           'architecture' => 'x86_64',
           'release' => {
             'major' => '12',
+          },
+        },
+      },
+    },
+    'suse15' => {
+      :extra_packages => [
+        'sssd-krb5',
+        'sssd-ad',
+        'sssd-ipa',
+        'sssd-32bit',
+        'sssd-tools',
+        'sssd-ldap',
+      ],
+      :facts_hash => {
+        :osfamily => 'Suse',
+        :operatingsystem => 'SLES',
+        :operatingsystemrelease => '15.3',
+        :operatingsystemmajrelease => '15.3',
+        :os => {
+          'family'       => 'Suse',
+          'architecture' => 'x86_64',
+          'release' => {
+            'major' => '15',
           },
         },
       },
