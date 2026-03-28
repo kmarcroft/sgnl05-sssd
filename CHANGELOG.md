@@ -1,3 +1,9 @@
+### 2026-03-28 (4.0.1)
+  * Add puppet-strings gem for REFERENCE.md generation
+  * Fix spec tests to match ensure_packages behavior (installed vs present)
+  * Fix trailing comma lint warnings in examples
+  * Fix rubocop configuration for rspec-puppet conventions
+
 ### 2026-03-28 (4.0.0)
   * Fork from sgnl05/sssd, new maintainer marckri
   * Modernize for Puppet/OpenVox 8.x compatibility (require >= 7.0.0 < 9.0.0)

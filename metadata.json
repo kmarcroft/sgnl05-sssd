@@ -1,6 +1,6 @@
 {
   "name": "marckri-sssd",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "author": "Kristian Marcroft",
   "summary": "Install and configure SSSD",
   "license": "GPL-3.0",
