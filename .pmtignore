@@ -33,16 +33,10 @@
 .plan_cache.json
 .rerun.json
 bolt-debug.log
-.vscode/
-
-# OS X
-.DS_Store
-
-# Puppet
-coverage/
-spec/fixtures/manifests/*
-spec/fixtures/modules/*
-log/
-
-# Emacs
-*~
+/.github/
+/.vscode/
+/spec/
+/Rakefile
+/.rspec
+/.rubocop.yml
+/.puppet-lint.rc

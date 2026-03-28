@@ -1,5 +1,0 @@
----
-
-sssd::extra_packages:
-  - 'sssd-32bit'
-  - 'sssd-tools'

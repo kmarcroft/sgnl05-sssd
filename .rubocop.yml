@@ -1,0 +1,50 @@
+---
+AllCops:
+  NewCops: disable
+  TargetRubyVersion: '3.2'
+  Include:
+    - '**/*.rb'
+  Exclude:
+    - bin/*
+    - '.vendor/**/*'
+    - '**/vendor/**/*'
+    - pkg/**/*
+    - spec/fixtures/**/*
+    - vendor/**/*
+    - '**/*.erb'
+
+Layout/LineLength:
+  Enabled: false
+
+Metrics:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+RSpec:
+  Enabled: false

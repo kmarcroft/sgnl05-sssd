@@ -1,55 +1,93 @@
 {
-  "name": "sgnl05-sssd",
-  "version": "3.1.0",
-  "author": "sgnl05",
+  "name": "marckri-sssd",
+  "version": "4.0.0",
+  "author": "Kristian Marcroft",
   "summary": "Install and configure SSSD",
   "license": "GPL-3.0+",
-  "source": "git://github.com/sgnl05/sgnl05-sssd.git",
-  "project_page": "https://github.com/sgnl05/sgnl05-sssd",
-  "issues_url": "https://github.com/sgnl05/sgnl05-sssd/issues",
-  "tags": ["sssd", "authentication", "ldap", "active-directory", "ad", "freeipa", "ipa", "idm"],
+  "source": "https://github.com/KriMax/puppet-sssd",
+  "project_page": "https://github.com/KriMax/puppet-sssd",
+  "issues_url": "https://github.com/KriMax/puppet-sssd/issues",
+  "tags": [
+    "sssd",
+    "authentication",
+    "ldap",
+    "active-directory",
+    "ad",
+    "freeipa",
+    "ipa",
+    "idm"
+  ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "Amazon",
-      "operatingsystemrelease": ["2"]
-    },
-    {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": ["5","6","7","8"]
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     },
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": ["5","6","7"]
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     },
     {
-      "operatingsystem": "Fedora",
-      "operatingsystemrelease": ["30","31","32","33"]
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     },
     {
-      "operatingsystem": "Gentoo",
-      "operatingsystemrelease": ["3","4"]
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     },
     {
       "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": ["5","6","7"]
-    },
-    {
-      "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": ["14.04","16.04","18.04"]
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     },
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": ["7", "8", "9", "10"]
+      "operatingsystemrelease": [
+        "11",
+        "12",
+        "13"
+      ]
     },
     {
-      "operatingsystem": "Suse",
-      "operatingsystemrelease": ["11", "12", "15"]
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "20.04",
+        "22.04",
+        "24.04"
+      ]
     }
   ],
   "requirements": [
-    {"name":"puppet","version_requirement":">= 5.5.10 < 7.0.0" }
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
   ],
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 5.2.0 < 7.0.0"}
-  ]
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 8.0.0 < 10.0.0"
+    }
+  ],
+  "pdk-version": "3.6.1",
+  "template-url": "pdk-default#3.6.1",
+  "template-ref": "tags/3.6.1-0-gb9426e5"
 }

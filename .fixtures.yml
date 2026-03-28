@@ -1,7 +1,8 @@
+---
 fixtures:
-  repositories:
+  forge_modules:
     stdlib:
-      repo: 'git://github.com/puppetlabs/puppetlabs-stdlib.git'
-      ref: '5.2.0'
+      repo: "puppetlabs/stdlib"
+      ref: "9.7.0"
   symlinks:
     sssd: "#{source_dir}"

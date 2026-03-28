@@ -1,0 +1,8 @@
+*.rb eol=lf
+*.erb eol=lf
+*.pp eol=lf
+*.sh eol=lf
+*.yaml eol=lf
+*.yml eol=lf
+*.json eol=lf
+*.md eol=lf

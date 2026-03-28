@@ -1,61 +1,41 @@
+# frozen_string_literal: true
+
+require 'rubygems'
+require 'bundler/setup'
+
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 require 'metadata-json-lint/rake_task'
 
+begin
+  require 'puppet_blacksmith/rake_tasks'
+rescue LoadError
+  # puppet-blacksmith is optional (development group)
+end
+
+desc 'Lint metadata.json file'
+task :meta do
+  sh 'metadata-json-lint metadata.json'
+end
+
 exclude_paths = [
-  'modules/**/*',
+  'bundle/**/*',
   'pkg/**/*',
+  'vendor/**/*',
   'spec/**/*',
-  'vendor/**/*'
 ]
 
-PuppetLint.configuration.fail_on_warnings = true
-PuppetLint.configuration.relative = true
-PuppetLint.configuration.send('disable_80chars')
-PuppetLint.configuration.send('disable_140chars')
-PuppetLint.configuration.ignore_paths = exclude_paths
+PuppetLint::RakeTask.new :lint do |config|
+  config.ignore_paths = exclude_paths
+  config.log_format = '%{path}:%{line}:%{KIND}: %{message}'
+end
+
 PuppetSyntax.exclude_paths = exclude_paths
 
-Rake::Task[:default].prerequisites.clear
-task :default => :all
-
-desc 'Run acceptance tests'
-RSpec::Core::RakeTask.new(:acceptance) do |t|
-  t.pattern = 'spec/acceptance'
+desc 'Populate CONTRIBUTORS file'
+task :contributors do
+  system("git log --format='%aN' | sort -u > CONTRIBUTORS")
 end
 
-desc 'Clean up modules / pkg'
-task :clean do
-  sh 'rm -rf modules pkg spec/fixtures'
-end
-
-task :success do
-  puts "\n\e[32mAll tests passing...\e[0m"
-end
-
-# Puppet Strings (Documentation generation from inline comments)
-# See: https://github.com/puppetlabs/puppet-strings#rake-tasks
-require 'puppet-strings/tasks'
-
-desc 'Alias for strings:generate'
-task :doc => ['strings:generate']
-
-desc 'Generate REFERENCE.md'
-task :reference do
-  sh 'puppet strings generate --format markdown'
-end
-
-desc 'Run all'
-task :all => [
-  :clean,
-  :test,
-  :success
-]
-
-desc 'Run validate, lint and spec tests.'
-task :test do
-  [:lint, :validate, :syntax, :spec, :doc, :reference].each do |test|
-    Rake::Task[test].invoke
-  end
-end
+task default: [:lint, :syntax, :spec]
