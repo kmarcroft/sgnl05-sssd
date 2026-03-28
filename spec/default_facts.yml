@@ -1,0 +1,5 @@
+---
+networking:
+  domain: 'example.com'
+  fqdn: 'test.example.com'
+  hostname: 'test'

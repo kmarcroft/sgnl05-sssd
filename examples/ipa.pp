@@ -1,4 +1,4 @@
-class {'::sssd':
+class { 'sssd':
   config => {
     'sssd'                  => {
       'domains'             => 'example.com',

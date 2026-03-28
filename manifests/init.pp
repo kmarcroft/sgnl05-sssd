@@ -3,7 +3,7 @@
 # Installs and configures SSSD
 #
 # @example Declaring the class
-#   include ::sssd
+#   include sssd
 #
 # @param ensure Ensure if the sssd config file is to be present or absent.
 #
@@ -35,15 +35,15 @@
 #   managing sssd related services. Intended to be used to manage messagebus
 #   service to prevent `Error: Could not start Service[oddjobd]`.
 #
-# @param enable_mkhomedir_flags Array of flags to use with authconfig
-#   or authselect to enable auto-creation of home directories.
+# @param enable_mkhomedir_flags Array of flags to use with authselect
+#   to enable auto-creation of home directories.
 #
-# @param disable_mkhomedir_flags Array of flags to use with authconfig
-#   or authselect to disable auto-creation of home directories.
+# @param disable_mkhomedir_flags Array of flags to use with authselect
+#   to disable auto-creation of home directories.
 #
 # @param pam_mkhomedir_umask Umask to set for pam_mkhomedir (oddjobd-mkhomedir on RedHat uses UMASK from login.defs)
 #
-# @param ensure_absent_flags Array of flags to use with authconfig when service
+# @param ensure_absent_flags Array of flags to use with authselect when service
 #   is disabled.
 #
 # @param authselect_profile  Name of authselect profile to use
@@ -52,11 +52,11 @@ class sssd (
   Enum['present', 'absent'] $ensure = 'present',
   Hash $config = {
     'sssd'               => {
-      'domains'             => $::domain,
+      'domains'             => $facts['networking']['domain'],
       'config_file_version' => 2,
       'services'            => ['nss', 'pam'],
     },
-    "domain/${::domain}" => {
+    "domain/${facts['networking']['domain']}" => {
       'access_provider'    => 'simple',
       'simple_allow_users' => ['root'],
     },
@@ -73,64 +73,13 @@ class sssd (
   Variant[Boolean, Enum['running', 'stopped']] $service_ensure = 'running',
   Array $service_dependencies = [],
   Array $enable_mkhomedir_flags = [
-    '--enablesssd',
-    '--enablesssdauth',
-    '--enablemkhomedir',
+    'with-mkhomedir',
   ],
-  Array $disable_mkhomedir_flags = [
-    '--enablesssd',
-    '--enablesssdauth',
-    '--disablemkhomedir',
-  ],
+  Array $disable_mkhomedir_flags = [],
   String $pam_mkhomedir_umask = '0022',
-  Array $ensure_absent_flags = [
-    '--disablesssd',
-    '--disablesssdauth',
-  ],
-  String $authselect_profile='sssd',
+  Array $ensure_absent_flags = [],
+  String $authselect_profile = 'sssd',
 ) {
-
-  # Warn on unsupported platforms
-  if ($::facts['os']['family'] == 'RedHat') {
-    if ($::facts['os']['name'] == 'Amazon') {
-      if !($::facts['os']['release']['major'] in ['2']) {
-        warning("osname Amazon's os.release.major is <${::facts['os']['release']['major']}> and must be 2.")
-      }
-    } elsif ($::facts['os']['name'] in ['RedHat', 'CentOS']) {
-      if !($::facts['os']['release']['major'] in ['6', '7', '8']) {
-        warning("osname RedHat's os.release.major is <${::facts['os']['release']['major']}> and must be 6, 7 or 8.")
-      }
-    } elsif ($::facts['os']['name'] == 'Fedora') {
-      if !($::facts['os']['release']['major'] in ['30', '31', '32', '33']) {
-        warning("osname Fedora's os.release.major is <${::facts['os']['release']['major']}> and must be 29, 30, 31, 32 or 33.")
-      }
-    } else {
-      warning("osname, \"${::facts['os']['name']}\", is recongnized as part of the RedHat family but is unsupported")
-    }
-  }
-
-  if $::facts['os']['family'] == 'Suse' {
-    if !($::facts['os']['release']['major'] in ['11', '12', '15']) {
-      warning("osfamily Suse's os.release.major is <${::facts['os']['release']['major']}> and must be 11, 12 or 15.")
-    }
-    if ($::facts['os']['release']['major'] == '11') and !($::facts['os']['release']['minor'] in ['3', '4']) {
-      warning("Suse 11's os.release.minor is <${::facts['os']['release']['minor']}> and must be 3 or 4.")
-    }
-  }
-
-  if ($::facts['os']['family'] == 'Debian') and !($::facts['os']['release']['major'] in ['8', '9', '14.04', '16.04', '18.04']) {
-    warning("osfamily Debian's os.release.major is <${::facts['os']['release']['major']}> and must be 8 or 9 for Debian and 14.04, 16.04 or 18.04 for Ubuntu.")
-  }
-
-  # Manually set service provider to systemd on Amazon Linux 2
-  # which is based off el7 and includes systemd.
-  # See issue PUP-8248 - https://tickets.puppetlabs.com/browse/PUP-8248
-  if ($::facts['os']['name'] == 'Amazon') and ($::facts['os']['release']['major'] == '2') {
-    $service_provider = 'systemd'
-  } else {
-    $service_provider = undef
-  }
-
   $service_enable = $service_ensure ? {
     'stopped' => false,
     default   => true,
@@ -177,7 +126,6 @@ class sssd (
         enable     => $service_enable,
         hasstatus  => true,
         hasrestart => true,
-        provider   => $service_provider,
         require    => Package[$extra_packages],
       }
     )
@@ -197,55 +145,28 @@ class sssd (
     content => template($config_template),
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
-      if ($::facts['os']['name'] == 'Fedora' and versioncmp($::facts['os']['release']['major'], '28') >= 0) or
-      ( $::facts['os']['family'] == 'RedHat' and versioncmp($::facts['os']['release']['major'], '8') >= 0) {
-        if $ensure == 'present' {
-          $authselect_options = join(
-            concat(
-              [$authselect_profile],
-              $mkhomedir ? {
-                true  => $enable_mkhomedir_flags,
-                false => $disable_mkhomedir_flags,
-              }
-            ),
-            ' ',
-          )
-        } else {
-          $authselect_options = join(concat([$authselect_profile],$ensure_absent_flags), ' ')
-        }
-        $authselect_exec = '/bin/authselect'
-
-        # The --force option is required in the event that the
-        # previous configuration contained in /etc/pam.d was not
-        # created by authselect. This condition is true on fresh
-        # installations.
-        exec { 'authselect-mkhomedir':
-          command => "${authselect_exec} select ${authselect_options} --force",
-          unless  => "/usr/bin/test \"`${authselect_exec} current --raw`\" = \"${authselect_options}\"",
-          require => File['sssd.conf'],
-        }
+      if $ensure == 'present' {
+        $authselect_options = join(
+          concat(
+            [$authselect_profile],
+            $mkhomedir ? {
+              true  => $enable_mkhomedir_flags,
+              false => $disable_mkhomedir_flags,
+            }
+          ),
+          ' ',
+        )
       } else {
-        if $ensure == 'present' {
-          $authconfig_flags = $mkhomedir ? {
-            true  => join($enable_mkhomedir_flags, ' '),
-            false => join($disable_mkhomedir_flags, ' '),
-          }
-        }
-        else {
-          $authconfig_flags = join($ensure_absent_flags, ' ')
-        }
+        $authselect_options = join(concat([$authselect_profile], $ensure_absent_flags), ' ')
+      }
+      $authselect_exec = '/bin/authselect'
 
-        $authconfig_update_cmd = "/usr/sbin/authconfig ${authconfig_flags} --update"
-        $authconfig_test_cmd   = "/usr/sbin/authconfig ${authconfig_flags} --test"
-        $authconfig_check_cmd  = "/usr/bin/test \"`${authconfig_test_cmd}`\" = \"`/usr/sbin/authconfig --test`\""
-
-        exec { 'authconfig-mkhomedir':
-          command => $authconfig_update_cmd,
-          unless  => $authconfig_check_cmd,
-          require => File['sssd.conf'],
-        }
+      exec { 'authselect-mkhomedir':
+        command => "${authselect_exec} select ${authselect_options} --force",
+        unless  => "/usr/bin/test \"`${authselect_exec} current --raw`\" = \"${authselect_options}\"",
+        require => File['sssd.conf'],
       }
     }
     'Debian': {
@@ -266,29 +187,7 @@ class sssd (
         }
       }
     }
-    'Suse': {
-      $pamconfig_mkhomedir_check_cmd  = '/usr/sbin/pam-config -q --mkhomedir | grep session:'
-      $pamconfig_mkhomedir_umask_check_cmd  = "/usr/sbin/pam-config -q --mkhomedir | grep umask=${pam_mkhomedir_umask}"
-      $pamconfig_check_cmd  = '/usr/sbin/pam-config -q --sss | grep session:'
-
-      if $mkhomedir {
-
-        exec { 'pam-config -a --mkhomedir':
-          path   => '/bin:/usr/bin:/sbin:/usr/sbin',
-          unless => $pamconfig_mkhomedir_check_cmd,
-        }
-        exec { "pam-config -a --mkhomedir-umask=${pam_mkhomedir_umask}":
-          path   => '/bin:/usr/bin:/sbin:/usr/sbin',
-          unless => $pamconfig_mkhomedir_umask_check_cmd,
-        }
-      }
-
-      exec { 'pam-config -a --sss':
-        path   => '/bin:/usr/bin:/sbin:/usr/sbin',
-        unless => $pamconfig_check_cmd,
-      }
-    }
-    default: { }
+    default: {}
   }
 
   $service_ensure_real = $sssd::ensure ? {

@@ -1,28 +1,64 @@
+# frozen_string_literal: true
+
+RSpec.configure do |c|
+  c.mock_with :rspec
+end
+
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet-facts'
+
 include RspecPuppetFacts
 
-RSpec.configure do |config|
-  config.formatter = :documentation
-  config.before :each do
-    # Ensure that we don't accidentally cache facts and environment between
-    # test cases.  This requires each example group to explicitly load the
-    # facts being exercised with something like
-    # Facter.collection.loader.load(:ipaddress)
-    Facter.clear
-    Facter.clear_messages
+default_facts = {
+  puppetversion: Puppet.version,
+  facterversion: Facter.version,
+}
+
+default_fact_files = [
+  File.expand_path(File.join(File.dirname(__FILE__), 'default_facts.yml')),
+  File.expand_path(File.join(File.dirname(__FILE__), 'default_module_facts.yml')),
+]
+
+default_fact_files.each do |f|
+  next unless File.exist?(f) && File.readable?(f) && File.size?(f)
+
+  begin
+    require 'deep_merge'
+    default_facts.deep_merge!(YAML.safe_load_file(f, permitted_classes: [], permitted_symbols: [], aliases: true))
+  rescue StandardError => e
+    RSpec.configuration.reporter.message "WARNING: Unable to load #{f}: #{e}"
   end
-  config.default_facts = {
-    :environment => 'rp_env',
-    :domain      => 'example.com',
-    :osfamily => 'RedHat',
-    :operatingsystem => 'RedHat',
-    :operatingsystemmajrelease => '7',
-    :os => {
-      'family'  => 'RedHat',
-      'release' => {
-        'major' => '7',
-      },
-    },
-  }
 end
+
+# Read default_facts and merge them over what is provided by facterdb
+default_facts.each do |fact, value|
+  add_custom_fact fact, value, merge_facts: true
+end
+
+RSpec.configure do |c|
+  c.default_facts = default_facts
+  c.hiera_config = 'spec/fixtures/hiera/hiera.yaml'
+
+  c.before :each do
+    Puppet.settings[:strict] = :warning
+    Puppet.settings[:strict_variables] = true
+  end
+
+  c.after(:suite) do
+    RSpec::Puppet::Coverage.report!(0)
+  end
+
+  # Filter backtrace noise
+  backtrace_exclusion_patterns = [
+    %r{spec_helper},
+    %r{gems},
+  ]
+
+  if c.respond_to?(:backtrace_exclusion_patterns)
+    c.backtrace_exclusion_patterns = backtrace_exclusion_patterns
+  elsif c.respond_to?(:backtrace_clean_patterns)
+    c.backtrace_clean_patterns = backtrace_exclusion_patterns
+  end
+end
+
+at_exit { RSpec::Puppet::Coverage.report! }
