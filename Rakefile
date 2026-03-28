@@ -14,6 +14,12 @@ rescue LoadError
   # puppet-blacksmith is optional (development group)
 end
 
+begin
+  require 'puppet-strings/tasks'
+rescue LoadError
+  # puppet-strings is optional (development group)
+end
+
 desc 'Lint metadata.json file'
 task :meta do
   sh 'metadata-json-lint metadata.json'

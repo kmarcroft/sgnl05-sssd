@@ -24,6 +24,7 @@ end
 
 group :development do
   gem 'pdk', '>= 3.0'
+  gem 'puppet-strings', '>= 4.0'
   gem 'puppet-blacksmith', '>= 6.0'
   gem 'github_changelog_generator', '>= 1.16'
 end
