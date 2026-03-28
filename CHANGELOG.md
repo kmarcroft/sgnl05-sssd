@@ -1,3 +1,6 @@
+### 2026-03-28 (4.0.3)
+  * Remove REFERENCE.md generation from CI build job
+
 ### 2026-03-28 (4.0.2)
   * Fix rake reference task (add alias for strings:generate:reference)
 
