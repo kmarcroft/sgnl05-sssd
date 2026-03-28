@@ -19,6 +19,6 @@ class { 'sssd':
       'fallback_homedir'               => '/home/%d/%u',
       'access_provider'                => 'simple',
       'simple_allow_groups'            => ['admins', 'users'],
-    }
-  }
+    },
+  },
 }

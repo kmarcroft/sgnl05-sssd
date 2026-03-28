@@ -8,6 +8,6 @@ class { 'sssd':
     'domain/example.com' => {
       'access_provider'    => 'simple',
       'simple_allow_users' => ['user1', 'user2'],
-    }
-  }
+    },
+  },
 }
