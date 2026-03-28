@@ -10,11 +10,8 @@
 
 1. `git tag -a 'x.y.z' -m 'x.y.z'`
 
-1. `git push upstream master`
+1. `git push origin main`
 
-1. `git push upstream --tags`
+1. `git push origin --tags`
 
-1. `git checkout gh-pages && bundle exec rake doc && git commit -am
-   'Docs for release x.y.z' && git push upstream gh-pages`
-
-Tags will automatically be pushed to the Puppet Forge [sgnl05/sssd](https://forge.puppet.com/sgnl05/sssd)
+Tags will automatically be pushed to the Puppet Forge [marckri/sssd](https://forge.puppet.com/marckri/sssd)

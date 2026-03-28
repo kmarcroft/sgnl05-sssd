@@ -19,7 +19,7 @@ Installs and configures SSSD
 ##### Declaring the class
 
 ```puppet
-include ::sssd
+include sssd
 ```
 
 #### Parameters
@@ -61,11 +61,11 @@ Hash containing entire SSSD config.
 
 Default value: `{
     'sssd'               => {
-      'domains'             => $::domain,
+      'domains'             => $facts['networking']['domain'],
       'config_file_version' => 2,
       'services'            => ['nss', 'pam'],
     },
-    "domain/${::domain}" => {
+    "domain/${facts['networking']['domain']}" => {
       'access_provider'    => 'simple',
       'simple_allow_users' => ['root'],
     },
@@ -167,27 +167,21 @@ Default value: `[]`
 
 Data type: `Array`
 
-Array of flags to use with authconfig
-or authselect to enable auto-creation of home directories.
+Array of flags to use with authselect
+to enable auto-creation of home directories.
 
 Default value: `[
-    '--enablesssd',
-    '--enablesssdauth',
-    '--enablemkhomedir',
+    'with-mkhomedir',
   ]`
 
 ##### <a name="disable_mkhomedir_flags"></a>`disable_mkhomedir_flags`
 
 Data type: `Array`
 
-Array of flags to use with authconfig
-or authselect to disable auto-creation of home directories.
+Array of flags to use with authselect
+to disable auto-creation of home directories.
 
-Default value: `[
-    '--enablesssd',
-    '--enablesssdauth',
-    '--disablemkhomedir',
-  ]`
+Default value: `[]`
 
 ##### <a name="pam_mkhomedir_umask"></a>`pam_mkhomedir_umask`
 
@@ -201,13 +195,10 @@ Default value: `'0022'`
 
 Data type: `Array`
 
-Array of flags to use with authconfig when service
+Array of flags to use with authselect when service
 is disabled.
 
-Default value: `[
-    '--disablesssd',
-    '--disablesssdauth',
-  ]`
+Default value: `[]`
 
 ##### <a name="authselect_profile"></a>`authselect_profile`
 

@@ -66,6 +66,14 @@ jobs:
           bundler-cache: true
       - name: Build module
         run: bundle exec rake module:build
+      - name: Generate REFERENCE.md
+        run: bundle exec rake reference
+      - name: Verify REFERENCE.md is up to date
+        run: |
+          if ! git diff --exit-code REFERENCE.md; then
+            echo "::error::REFERENCE.md is out of date. Run 'bundle exec rake reference' and commit the result."
+            exit 1
+          fi
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:

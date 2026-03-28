@@ -1,3 +1,18 @@
+### 2026-03-28 (4.0.0)
+  * Fork from sgnl05/sssd, new maintainer marckri
+  * Modernize for Puppet/OpenVox 8.x compatibility (require >= 7.0.0 < 9.0.0)
+  * Require puppetlabs-stdlib >= 8.0.0 < 10.0.0
+  * Adopt PDK 3.6.1 tooling and project structure
+  * Add GitHub Actions CI workflow (validate, unit test, build)
+  * Replace authconfig with authselect for all RedHat family platforms
+  * Use modern Puppet facts ($facts hash) instead of legacy top-scope variables
+  * Add support for EL 8/9/10 (RedHat, CentOS, Rocky, AlmaLinux, OracleLinux)
+  * Add support for Debian 11/12/13 and Ubuntu 20.04/22.04/24.04
+  * Drop support for SuSE/SLES, Amazon Linux, and Fedora
+  * Drop support for all EOL platforms (EL 5/6/7, Debian 7/8/9, Ubuntu 14.04/16.04/18.04, Fedora < 40, Suse 11, Gentoo)
+  * Remove authconfig dependency and related parameters
+  * Rewrite spec tests for modern rspec-puppet conventions
+
 ### 2020-01-28 (3.1.0)
   * Add support for RHEL 8 and newer Fedora versions (robertc99)
   * Add missing dependency (Thodoris Sotiropoulos)

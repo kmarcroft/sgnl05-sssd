@@ -1,16 +1,15 @@
 # sssd
 
-[![Build Status](https://travis-ci.org/sgnl05/sgnl05-sssd.svg)](https://travis-ci.org/sgnl05/sgnl05-sssd)
-[![Puppet Forge](https://img.shields.io/puppetforge/v/sgnl05/sssd.svg)](https://forge.puppetlabs.com/sgnl05/sssd)
-[![Puppet Forge Downloads](https://img.shields.io/puppetforge/dt/sgnl05/sssd.svg)](https://forge.puppetlabs.com/sgnl05/sssd)
-[![Puppet Forge Score](https://img.shields.io/puppetforge/f/sgnl05/sssd.svg)](https://forge.puppetlabs.com/sgnl05/sssd/scores)
+[![CI](https://github.com/kmarcroft/puppet-sssd/actions/workflows/ci.yml/badge.svg)](https://github.com/kmarcroft/puppet-sssd/actions/workflows/ci.yml)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/marckri/sssd.svg)](https://forge.puppet.com/marckri/sssd)
+[![Puppet Forge Downloads](https://img.shields.io/puppetforge/dt/marckri/sssd.svg)](https://forge.puppet.com/marckri/sssd)
 
 #### Table of Contents
 
 1. [Overview](#overview)
 2. [Usage - Configuration options and additional functionality](#usage)
-4. [Limitations - OS compatibility, etc.](#limitations)
-5. [Credits](#credits)
+3. [Limitations - OS compatibility, etc.](#limitations)
+4. [Credits](#credits)
 
 ## Overview
 
@@ -18,16 +17,14 @@ This module installs and configures SSSD (System Security Services Daemon)
 
 [SSSD][0] is used to provide access to identity and authentication remote resource through a common framework that can provide caching and offline support to the system.
 
-## Documented with Puppet Strings
-
-[Puppet Strings documentation](http://sgnl05.github.io/sgnl05-sssd/doc/)
+See [REFERENCE.md](REFERENCE.md) for detailed parameter documentation.
 
 ## Usage
 
 Example configuration:
 
 ```puppet
-class {'::sssd':
+class { 'sssd':
   config => {
     'sssd' => {
       'domains'             => 'ad.example.com',
@@ -119,48 +116,19 @@ Or you can use a relevant [module][1] for automation.
 
 ## Limitations
 
-This module tracks the latest release of the latest two major releases,
-currently Puppet versions 5 and 6.
+This module supports Puppet >= 7.0.0 and < 9.0.0 (including OpenVox 8.x).
 
-### Tested on
+Requires puppetlabs-stdlib >= 8.0.0 < 10.0.0.
 
-* Amazon Linux 2
-* Debian 8
-* Debian 9
-* EL 6
-* EL 7
-* EL 8
-* Fedora 30
-* Fedora 31
-* Fedora 32
-* Fedora 33
-* Gentoo 4
-* Suse 11
-* Suse 12
-* Suse 15
-* Ubuntu 14.04
-* Ubuntu 16.04
-* Ubuntu 18.04
+### Supported platforms
 
-### May work with
-
-These platforms are end of life (EOL) and once worked with the module
-and probably still do. We keep the data for them and if you use them a
-warning will appear instead of a failure. In order to speed up testing,
-we no longer run tests for EOL platforms.
-
-* Debian 7
-* EL 5
-* Fedora 26
-* Fedora 27
-* Gentoo 3
-
-## Versioning
-The v1 series of this module will support both Puppet v3 and v4. The v2
-series of this module will drop support for Puppet v3.
+* RedHat / CentOS / Rocky / AlmaLinux / OracleLinux 8, 9, 10
+* Debian 11, 12, 13
+* Ubuntu 20.04, 22.04, 24.04
 
 ## Credits
 
+* Originally developed as [sgnl05/sssd](https://github.com/sgnl05/sgnl05-sssd)
 * sssd.conf template from [walkamongus-sssd][2] by Chadwick Banning
 * See `CHANGELOG.md` file for additional credits
 
