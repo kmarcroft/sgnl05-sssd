@@ -16,6 +16,8 @@ end
 
 begin
   require 'puppet-strings/tasks'
+  desc 'Generate REFERENCE.md'
+  task :reference, [:debug, :backtrace] => ['strings:generate:reference']
 rescue LoadError
   # puppet-strings is optional (development group)
 end
